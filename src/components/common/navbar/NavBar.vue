@@ -19,6 +19,14 @@ export default {
     display: flex;
     line-height: 40px;
     box-shadow: 0 1px 1px rgba(100,100,100,.1);
+    /* position: fixed; */
+       position: sticky;
+       top: 0px;
+    /* left: 0px;
+    right: 0px;
+    z-index: 1;
+  */z-index: 2;
+    
 }
 .right{
     width: 60px;

@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import TabBar from '../common/TabBar'
-import TarbarItem from '../common/TarbarItem'
+import TabBar from '../common/tabbar/TabBar'
+import TarbarItem from '../common/tabbar/TarbarItem'
 export default {
     components:{
         TabBar,
