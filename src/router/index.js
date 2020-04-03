@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router'
 const Home = ()=>import('../views/home/Home')
-const Like = ()=>import('../views/like/Like')
+const Like = ()=>import('../views/kind/Kind')
 const Profile = ()=>import('../views/profile/Profile')
-const Solution = ()=>import('../views/solution/Solution')
+const Solution = ()=>import('../views/cart/Cart')
 Vue.use(Router)
 const routes = 
 [
@@ -16,11 +16,11 @@ const routes =
       component:Home
     },
     {
-      path:'/like',
+      path:'/kind',
       component:Like
     },
     {
-      path:'/solution',
+      path:'/cart',
       component:Solution
     },
     {

@@ -1,16 +1,16 @@
 <template>
-  <tab-bar>
+  <tab-bar class="home-tabbar">
       <tarbar-item path="/home" activecolor="blue" fontweight="bold">
         <img src="../../assets/img/home.svg" slot="icon-name" alt="">
          <img src="../../assets/img/home-active.svg" slot="icon-name-active" alt="">
         <div slot="text-name">首页</div>
       </tarbar-item>
-       <tarbar-item path="/like">
+       <tarbar-item path="/kind">
         <img src="../../assets/img/fenlei.svg" slot="icon-name" alt="">
           <img src="../../assets/img/fenlei-active.svg" slot="icon-name-active" alt="">
         <div slot="text-name">分类</div>
       </tarbar-item>
-       <tarbar-item path="/solution">
+       <tarbar-item path="/cart">
         <img src="../../assets/img/cart.svg" slot="icon-name" alt="">
         <img src="../../assets/img/cart-active.svg" slot="icon-name-active" alt="">
         <div slot="text-name">购物车</div>
@@ -36,5 +36,7 @@ export default {
 </script>
 
 <style>
-
+.home-tabbar{
+  height: 49px;
+}
 </style>
