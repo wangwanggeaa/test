@@ -3,7 +3,7 @@
     <nav-bar class="home-nav">
         <div slot="center">购物街</div>
     </nav-bar>
-    <scroll class="home-scroll" ref="scroll" @scroll="homescroll" :probetype="3" @pullingUp="loadmore">
+    <scroll class="home-scroll" ref="scroll" @scroll="homescroll" :probe-type="3" @pullingUp="loadmore">
         <home-swiper :banner="banner"></home-swiper>
         <recommand-view :recommand="recommend"></recommand-view>
         <feature-view></feature-view>

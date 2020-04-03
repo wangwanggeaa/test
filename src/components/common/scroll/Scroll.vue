@@ -15,7 +15,7 @@ export default {
         }
     },
     props:{
-        probetype:{
+        probeType:{
            type: Number,
            default:0
         },
@@ -27,7 +27,7 @@ export default {
     mounted(){
         //1.滚动
     this.bscroll = new BScroll(this.$refs.aaa,{
-        probeType:this.probetype,
+        probeType:this.probeType,
         pullUpLoad:this.pullupload
     })
     //2.监听滚动的位置
