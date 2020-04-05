@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-      <img :src="goodsitem.show.img" alt="">
+      <img :src="goodsitem.show.img" alt="" @load="imageload">
         <div class="goods-info">
             <p>{{goodsitem.title}}</p>
       <span class="info">{{goodsitem.orgPrice}}</span>
@@ -19,6 +19,13 @@ props:{
             return {}
         }
     }
+},
+methods:{
+  imageload(){
+    // console.log('---------');
+    this.$bus.$emit('imageload')//事件总线
+    
+  }
 }
 }
 </script>

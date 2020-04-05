@@ -21,14 +21,14 @@ export default {
         },
         pullupload:{
             type:Boolean,
-            default:true
+            default:false
         }
     },
     mounted(){
         //1.滚动
     this.bscroll = new BScroll(this.$refs.aaa,{
         probeType:this.probeType,
-        pullUpLoad:this.pullupload
+        // pullUpLoad:this.pullupload
     })
     //2.监听滚动的位置
     this.bscroll.on('scroll',position => {
@@ -37,6 +37,7 @@ export default {
         
     })
     //3.下拉加载更多
+    if(this.pullupload)
     this.bscroll.on('pullingUp',() => {
         console.log('下拉加载更多');
         this.$emit('pullingUp')
@@ -45,13 +46,15 @@ export default {
 },
 methods:{
     backtop(x,y,time=500){
-        this.bscroll.scrollTo(x,y,time)
+        this.bscroll && this.bscroll.scrollTo(x,y,time)
     },
     loadmore(){
-        this.bscroll.finishPullUp()
+        this.bscroll && this.bscroll.finishPullUp()
     },
     refresh(){
-        this.bscroll.refresh()
+        // console.log('-------');
+        
+         this.bscroll && this.bscroll.refresh()
     }
 }
 }

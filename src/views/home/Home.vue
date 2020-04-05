@@ -3,11 +3,16 @@
     <nav-bar class="home-nav">
         <div slot="center">购物街</div>
     </nav-bar>
-    <scroll class="home-scroll" ref="scroll" @scroll="homescroll" :probe-type="3" @pullingUp="loadmore">
-        <home-swiper :banner="banner"></home-swiper>
+      <tab-control class="Tabcontrol" 
+        :titles="['流行','新款','精选']" 
+        @tarclick="tarclick" ref="tabcontrol2" v-show="isfixed"></tab-control>
+    <scroll class="home-scroll" ref="scroll" @scroll="homescroll" :probe-type="3" @pullingUp="loadmore" :pullupload="true">
+        <home-swiper :banner="banner" @imageloaded="loadonce"></home-swiper>
         <recommand-view :recommand="recommend"></recommand-view>
         <feature-view></feature-view>
-        <tab-control class="Tabcontrol" :titles="['流行','新款','精选']" @tarclick="tarclick"></tab-control>
+        <tab-control 
+        :titles="['流行','新款','精选']" 
+        @tarclick="tarclick" ref="tabcontrol1" ></tab-control>
         <goods-list :goods="goods[currenttype].list"></goods-list>
     </scroll>
     <get-back @click.native="backtop" v-show="isorshow"></get-back>
@@ -22,6 +27,9 @@ import Scroll from '../../components/common/scroll/Scroll'
 import NavBar from '../../components/common/navbar/NavBar'
 import TabControl from '../../components/content/TabControl'
 import GoodsList from '../../components/content/goods/GoodList'
+
+
+import {debounce} from '../../common/utils'
 
 import HomeSwiper from './homechildren/HomeSwiper'
 import RecommandView from './homechildren/RecommandView'
@@ -57,7 +65,9 @@ data(){
 
        },
        currenttype:'pop',
-       isorshow:false
+       isorshow:false,
+       tabOffsetTop:0,
+       isfixed:false
        
 
     }
@@ -69,8 +79,34 @@ created(){
   this.gethomegoods('new')
   this.gethomegoods('sell')
 
+  
+  
+},
+mounted(){
+    const refresh = debounce(this.$refs.scroll.refresh,200)
+    this.$bus.$on('imageload',() => {
+    //   console.log('------');
+      
+    //   this.$refs.scroll.bscroll.refresh();
+    // this.$refs.scroll.refresh()
+    
+    refresh();
+    
+    
+  })
+        
+  
+  
+  
 },
 methods:{
+    
+    loadonce(){
+        this.tabOffsetTop = this.$refs.tabcontrol1.$el.offsetTop;
+        console.log(this.$refs.tabcontrol1.$el.offsetTop);
+        
+        
+    },
     tarclick(index){
         // console.log(index);
         switch(index){
@@ -81,6 +117,8 @@ methods:{
             case 2 : this.currenttype = 'sell'
             break;
         }
+        this.$refs.tabcontrol1.currentindex =index;
+         this.$refs.tabcontrol2.currentindex =index;
         
     },
     backtop(){//回到顶部
@@ -95,13 +133,15 @@ methods:{
         // console.log(position);
         // this.isorshow = -position.y > 1000 ? true : false;
         this.isorshow = -position.y > 1000
+        this.isfixed = (-position.y) > this.tabOffsetTop
+         
         
     },
     loadmore(){
         console.log('上拉加载更多');
         this.gethomegoods(this.currenttype);
         // this.$refs.scroll.bscroll.refresh();
-        this.$refs.scroll.refresh()
+        // this.$refs.scroll.refresh();
         
     },
 
@@ -149,16 +189,19 @@ methods:{
 .home-nav{
     color: white;
     background-color: var(--color-tint);
-    position: absolute;
+    position: relative;
        top: 0px;
        left: 0px;
        right: 0px;
        
+       
 }
 .Tabcontrol{
-    position: sticky;
-    top: 44px;
-    z-index: 4;
+    position: fixed;
+    /* top: 44px; */
+    z-index: 8;
+    left: 0px;
+    right: 0px;
 }
 .home-scroll{
     position: absolute;
