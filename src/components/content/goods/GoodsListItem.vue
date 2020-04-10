@@ -1,9 +1,9 @@
 <template>
   <div class="goods">
-      <img :src="goodsitem.show.img" alt="" @load="imageload">
+      <img :src="showImage" alt="" @load="imageload" @click="goodsitemclick">
         <div class="goods-info">
-            <p>{{goodsitem.title}}</p>
-      <span class="info">{{goodsitem.orgPrice}}</span>
+      <p>{{goodsitem.title}}</p>
+      <span class="info">{{showPrice}}</span>
       <span class="collect">{{goodsitem.cfav}}</span>
         </div>
     
@@ -25,6 +25,18 @@ methods:{
     // console.log('---------');
     this.$bus.$emit('imageload')//事件总线
     
+    
+  },
+  goodsitemclick(){
+    this.$router.push('/detail/' + this.goodsitem.iid)
+  }
+},
+computed:{
+  showImage(){
+    return  this.goodsitem.image || this.goodsitem.show.img 
+  },
+  showPrice(){
+    return this.goodsitem.price || this.goodsitem.orgPrice
   }
 }
 }
@@ -52,6 +64,7 @@ methods:{
     overflow: hidden;
     text-align: center;
     z-index: 1.5;
+    /* margin-top: 5px; */
   }
 
   .goods-info p {
@@ -59,6 +72,7 @@ methods:{
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-bottom: 3px;
+
   }
 
   .goods-info .price {

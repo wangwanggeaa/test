@@ -4,6 +4,7 @@ const Home = ()=>import('../views/home/Home')
 const Like = ()=>import('../views/kind/Kind')
 const Profile = ()=>import('../views/profile/Profile')
 const Solution = ()=>import('../views/cart/Cart')
+const Detail = () => import('../views/detail/Detail')
 Vue.use(Router)
 const routes = 
 [
@@ -27,6 +28,10 @@ const routes =
       path:'/profile',
       component:Profile
     },
+    {
+      path:'/detail/:iid',
+      component:Detail
+    }
   ]
 const router = new Router({
     routes,

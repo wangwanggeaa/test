@@ -52,9 +52,15 @@ methods:{
         this.bscroll && this.bscroll.finishPullUp()
     },
     refresh(){
-        // console.log('-------');
+        console.log('-------');
         
          this.bscroll && this.bscroll.refresh()
+    },
+    getbackY(){
+       return  this.bscroll ? this.bscroll.y : 0
+    },
+    scrollTo(x,y,time = 500){
+         this.bscroll && this.bscroll.scrollTo(x,y,time)
     }
 }
 }

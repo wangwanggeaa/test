@@ -36,6 +36,8 @@ import RecommandView from './homechildren/RecommandView'
 import FeatureView from './homechildren/FeatureView'
 
 import {homemultidata,gethomegoods} from '../../network/home'
+
+import {itemListenerMixin} from '../../common/mixin'
 // import {Swiper,SwiperItem} from '../../components/common/swiper/index'
 // import request from '../../network/request'
 export default {
@@ -67,11 +69,14 @@ data(){
        currenttype:'pop',
        isorshow:false,
        tabOffsetTop:0,
-       isfixed:false
+       isfixed:false,
+       currentlocation : 0,
+       itemImgListener:null
        
 
     }
 },
+mixins:[itemListenerMixin],
 created(){
     
   this.homemultidata() 
@@ -82,22 +87,34 @@ created(){
   
   
 },
-mounted(){
-    const refresh = debounce(this.$refs.scroll.refresh,200)
-    this.$bus.$on('imageload',() => {
-    //   console.log('------');
-      
-    //   this.$refs.scroll.bscroll.refresh();
-    // this.$refs.scroll.refresh()
+/* mounted(){
+     const refresh = debounce(this.$refs.scroll.refresh,200)
+    this.itemImgListener = () => {
+       refresh();
+    }
+    this.$bus.$on('imageload',this.itemImgListener
+      this.$refs.scroll.bscroll.refresh();
+    this.$refs.scroll.refresh()  
+  ) 
+}, */
+activated(){
+console.log('活跃');
+this.$refs.scroll.scrollTo(0,this.currentlocation,0)
+
+
+},
+deactivated(){
+console.log('离开');
+this.currentlocation = this.$refs.scroll.getbackY()
+this.$bus.$off('imageload',this.itemImgListener)  //离开时停掉imageload事件
+
+// console.log(this.$refs.scroll.bscroll.y);
+
+
+},
+destroyed(){
+    console.log('home销毁');
     
-    refresh();
-    
-    
-  })
-        
-  
-  
-  
 },
 methods:{
     
