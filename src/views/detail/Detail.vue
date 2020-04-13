@@ -1,7 +1,8 @@
 <template>
   <div id="detail">
-      <detail-navbar class="detail-navbar" @itemclick="itemclick"></detail-navbar>
-     <scroll class="scroll" ref="scroll">
+      <detail-navbar class="detail-navbar" ref="navbar" @itemclick="itemclick"></detail-navbar>
+      <div>{{$store.state.productlist}}</div>
+     <scroll class="scroll" ref="scroll" :probeType="3" @scroll="contentScroll">
          
              <detail-swiper :top-images="topimage"></detail-swiper>
              <goods-desc :goodsmessage="goods"></goods-desc>
@@ -12,6 +13,7 @@
              <good-list :goods="recommendgoods" ref="recommend"></good-list>
           
      </scroll>
+     <detail-bottom-bar @addcart="addToCart"></detail-bottom-bar>
      
   </div>
 </template>
@@ -26,6 +28,7 @@ import DetailShopInfo from './detailchildren/DetailShopInfo'
 import DetailGoodsInfo from './detailchildren/DetailGoodsInfo'
 import DetailParamsInfo from './detailchildren/DetailParamInfo'
 import CommentInfo from './detailchildren/CommentInfo'
+import DetailBottomBar from './detailchildren/DetailBottomBar'
 import GoodList from '../../components/content/goods/GoodList'
 
 import Scroll from '../../components/common/scroll/Scroll'
@@ -41,9 +44,11 @@ components:{
     DetailShopInfo,
     DetailGoodsInfo,
     DetailParamsInfo,
+    CommentInfo,
+    DetailBottomBar,
     Scroll,
     GoodList,
-    CommentInfo
+   
 },
 data(){
     return {
@@ -56,7 +61,8 @@ data(){
         commentinfo:{},
         recommendgoods:[],
         itemImgListener:null,
-        tabTitleYs:[0]
+        tabTitleYs:[0],
+        currentindex: 0
     }
 },
 mixins:[itemListenerMixin],
@@ -131,15 +137,51 @@ methods:{
         // 选项卡切换回到对应区域
         this.tabTitleYs = []
         this.tabTitleYs.push(0)
-        this.tabTitleYs.push(-this.$refs.param.$el.offsetTop)
-        this.tabTitleYs.push(-this.$refs.comment.$el.offsetTop)
-        this.tabTitleYs.push(-this.$refs.recommend.$el.offsetTop)
+        this.tabTitleYs.push(this.$refs.param.$el.offsetTop)
+        this.tabTitleYs.push(this.$refs.comment.$el.offsetTop)
+        this.tabTitleYs.push(this.$refs.recommend.$el.offsetTop)
+        this.tabTitleYs.push(Number.MAX_VALUE)
         console.log(this.tabTitleYs);
 
     },
     itemclick(index){
         // console.log(index);
-        this.$refs.scroll.scrollTo(0,this.tabTitleYs[index],400)
+        this.$refs.scroll.scrollTo(0,-this.tabTitleYs[index],400)
+        
+    },
+    contentScroll(position){
+        
+        // console.log(position.y);
+         const positionY = -position.y
+        for(let i = 0; i < this.tabTitleYs.length; i++){
+            // parseInt(i);
+            if((this.currentindex !== i && i < this.tabTitleYs.length - 1 && positionY >= this.tabTitleYs[i] && positionY < this.tabTitleYs[i+1]) || 
+            i === this.tabTitleYs.length - 1 && positionY >=this.tabTitleYs[this.tabTitleYs.length - 1]){
+                this.currentindex = i
+                this.$refs.navbar.currentindex = this.currentindex
+                console.log(i);
+                
+            }
+     /*        if(this.currentindex !== i && i < this.tabTitleYs.length - 1 && positionY >= this.tabTitleYs[i] && positionY < this.tabTitleYs[i+1])
+            {   this.currentindex = i
+                console.log(i);
+                  this.$refs.navbar.currentindex = this.currentindex
+                
+            } */
+        }
+        
+    },
+    addToCart(){
+        console.log('------');
+        const product = {
+            title:this.goods.title,
+            desc:this.goods.desc,
+            price:this.goods.lowNowPrice,
+            iid:this.$route.params.iid
+            
+        };
+        this.$store.commit('addToCart',product)
+        
         
     }
 },
